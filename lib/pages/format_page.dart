@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:phydoc_test_exercise/main.dart';
 
 class FormatPage extends StatefulWidget {
   const FormatPage({super.key});
@@ -11,13 +12,13 @@ class FormatPage extends StatefulWidget {
 class _FormatPageState extends State<FormatPage> {
   int? _selectedIndex;
 
-  final BoxDecoration _chosenContainer = BoxDecoration(
-      border: Border.all(width: 2, color: const Color(0xff4435FF)),
+  final BoxDecoration _chosenStyle = BoxDecoration(
+      border: Border.all(width: 2, color: colors["chosen"]!),
       borderRadius: const BorderRadius.all(Radius.circular(12)),
-      color: const Color(0xffECEBFF));
-  final BoxDecoration _unchosenContainer = const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(12)),
-      color: Color(0xffEFF2F5));
+      color: colors["chosen_bg"]!);
+  final BoxDecoration _unchosenStyle = BoxDecoration(
+      borderRadius: const BorderRadius.all(Radius.circular(12)),
+      color: colors["unchosen"]!);
 
   final List<String> _titles = [
     "Онлайн-консультация",
@@ -32,42 +33,56 @@ class _FormatPageState extends State<FormatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-        shrinkWrap: true,
-        children: List.generate(3, (index) {
-          final bool isSelected = _selectedIndex == index;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                },
-                child: Container(
-                  decoration:
-                      isSelected ? _chosenContainer : _unchosenContainer,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _titles[index],
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        Text(_subtitles[index], style: TextStyle(fontSize: 16))
-                      ],
+    var options = List.generate(3, (index) {
+      final bool isSelected = _selectedIndex == index;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            child: Container(
+              decoration: isSelected ? _chosenStyle : _unchosenStyle,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _titles[index],
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w500),
                     ),
-                  ),
+                    Text(_subtitles[index],
+                        style: const TextStyle(fontSize: 16))
+                  ],
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              )
-            ],
-          );
-        }));
+            ),
+          ),
+          const SizedBox(
+            height: 16,
+          )
+        ],
+      );
+    });
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: ListView(children: [
+          const Text(
+            "Выберите формат приема",
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          for (var col in options) col,
+        ]),
+      ),
+    );
   }
 }
