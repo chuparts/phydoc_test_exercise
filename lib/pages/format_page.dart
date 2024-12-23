@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:phydoc_test_exercise/components.dart';
 import 'package:phydoc_test_exercise/main.dart';
+import 'package:phydoc_test_exercise/providers.dart';
+import 'package:provider/provider.dart';
 
 class FormatPage extends StatefulWidget {
   const FormatPage({super.key});
@@ -17,6 +20,7 @@ class _FormatPageState extends State<FormatPage> {
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       color: colors["chosen_bg"]!);
   final BoxDecoration _unchosenStyle = BoxDecoration(
+      border: Border.all(width: 2, color: colors["unchosen"]!),
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       color: colors["unchosen"]!);
 
@@ -33,6 +37,7 @@ class _FormatPageState extends State<FormatPage> {
 
   @override
   Widget build(BuildContext context) {
+    _selectedIndex = context.read<OperationProvider>().chosenFormatNum;
     var options = List.generate(3, (index) {
       final bool isSelected = _selectedIndex == index;
       return Column(
@@ -42,6 +47,7 @@ class _FormatPageState extends State<FormatPage> {
             onTap: () {
               setState(() {
                 _selectedIndex = index;
+                context.read<OperationProvider>().selectChosenFormat(_selectedIndex!);
               });
             },
             child: Container(
@@ -73,10 +79,7 @@ class _FormatPageState extends State<FormatPage> {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: ListView(children: [
-          const Text(
-            "Выберите формат приема",
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
-          ),
+          title("Выберите формат приема"),
           const SizedBox(
             height: 16,
           ),
