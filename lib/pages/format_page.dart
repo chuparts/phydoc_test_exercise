@@ -76,16 +76,13 @@ class _FormatPageState extends State<FormatPage> {
       );
     });
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ListView(children: [
-          title("Выберите формат приема"),
-          const SizedBox(
-            height: 16,
-          ),
-          for (var col in options) col,
-        ]),
-      ),
+      child: ListView(children: [
+        title("Выберите формат приема"),
+        const SizedBox(
+          height: 16,
+        ),
+        for (var col in options) col,
+      ]),
     );
   }
 }

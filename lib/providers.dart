@@ -23,3 +23,19 @@ class OperationProvider extends ChangeNotifier {
   }
 }
 
+class FormProvider extends ChangeNotifier {
+  int selectedPage = 0;
+  GlobalKey<FormState>? formKey;
+  String? name;
+
+  void setFormKey(GlobalKey<FormState> key) {
+    formKey = key;
+  }
+
+  void setSelectedPage(int page) {
+    selectedPage = page;
+  }
+  void setName(String name) {
+    name = name;
+  }
+}

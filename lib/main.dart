@@ -7,8 +7,8 @@ Map<String, Color> colors = {
   "unchosen": const Color(0xffEFF2F5),
   "chosen": const Color(0xff4435FF),
   "chosen_bg": const Color(0xffECEBFF),
-  "icon_fill" : const Color(0xff667085),
-  "border" : const Color(0xffD0D5DD)
+  "icon_fill": const Color(0xff667085),
+  "border": const Color(0xffD0D5DD)
 };
 
 void main() {
@@ -22,8 +22,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-            create: (context) => OperationProvider())
+        ChangeNotifierProvider(create: (context) => OperationProvider()),
+        ChangeNotifierProvider(create: (context) => FormProvider())
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

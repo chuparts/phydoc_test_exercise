@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:phydoc_test_exercise/components.dart';
 import 'package:phydoc_test_exercise/main.dart';
+import 'package:phydoc_test_exercise/providers.dart';
+import 'package:provider/provider.dart';
 
 class PatientPage extends StatefulWidget {
   const PatientPage({super.key});
@@ -11,7 +13,8 @@ class PatientPage extends StatefulWidget {
 }
 
 class _PatientPageState extends State<PatientPage> {
-  int selectedPage = 0;
+  int _selectedPage = 0;
+  var formKey = GlobalKey<FormState>();
 
   BoxDecoration chosenPatient = BoxDecoration(
     color: colors["chosen"],
@@ -41,6 +44,7 @@ class _PatientPageState extends State<PatientPage> {
   }
 
   Widget selfPage() {
+    context.read<FormProvider>().setName("Иванов Иван");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -66,7 +70,7 @@ class _PatientPageState extends State<PatientPage> {
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 16),
         ),
         const SizedBox(
           height: 8,
@@ -110,6 +114,7 @@ class _PatientPageState extends State<PatientPage> {
 
   Widget someonePage() {
     return Form(
+      key: formKey,
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,6 +123,7 @@ class _PatientPageState extends State<PatientPage> {
               if (value!.isEmpty) {
                 return "Введите имя и фамилию";
               }
+              context.read<FormProvider>().setName(value);
               return null;
             }, "Name"),
             customFormField("ИИН", "Введите ИИН человека", (String? value) {
@@ -150,8 +156,11 @@ class _PatientPageState extends State<PatientPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
+    setState(() {
+      context.read<FormProvider>().setFormKey(formKey);
+      _selectedPage = context.read<FormProvider>().selectedPage;
+    });
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -172,11 +181,14 @@ class _PatientPageState extends State<PatientPage> {
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedPage = 0;
+                        _selectedPage = 0;
+                        context
+                            .read<FormProvider>()
+                            .setSelectedPage(_selectedPage);
                       });
                     },
                     child: Container(
-                      decoration: selectedPage == 0 ? chosenPatient : null,
+                      decoration: _selectedPage == 0 ? chosenPatient : null,
                       width: 148,
                       height: 46,
                       child: Center(
@@ -185,7 +197,7 @@ class _PatientPageState extends State<PatientPage> {
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
-                              color: selectedPage == 0
+                              color: _selectedPage == 0
                                   ? Colors.white
                                   : Colors.black),
                         ),
@@ -198,11 +210,14 @@ class _PatientPageState extends State<PatientPage> {
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedPage = 1;
+                        _selectedPage = 1;
+                        context
+                            .read<FormProvider>()
+                            .setSelectedPage(_selectedPage);
                       });
                     },
                     child: Container(
-                      decoration: selectedPage == 1 ? chosenPatient : null,
+                      decoration: _selectedPage == 1 ? chosenPatient : null,
                       width: 148,
                       height: 46,
                       child: Center(
@@ -211,7 +226,7 @@ class _PatientPageState extends State<PatientPage> {
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
-                              color: selectedPage == 1
+                              color: _selectedPage == 1
                                   ? Colors.white
                                   : Colors.black),
                         ),
@@ -225,7 +240,7 @@ class _PatientPageState extends State<PatientPage> {
           const SizedBox(
             height: 20,
           ),
-          selectedPage == 0 ? selfPage() : someonePage(),
+          _selectedPage == 0 ? selfPage() : someonePage(),
         ],
       ),
     );

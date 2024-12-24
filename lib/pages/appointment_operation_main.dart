@@ -15,7 +15,6 @@ class AppointmentOperationMain extends StatefulWidget {
 }
 
 class _AppointmentOperationMainState extends State<AppointmentOperationMain> {
-
   List<Widget> operation = [
     const FormatPage(),
     const PatientPage(),
@@ -23,7 +22,7 @@ class _AppointmentOperationMainState extends State<AppointmentOperationMain> {
     const FinalOverviewPage()
   ];
 
-  int currentPage = 0;
+  int currentStep = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +34,7 @@ class _AppointmentOperationMainState extends State<AppointmentOperationMain> {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(3, (index) {
-                  var operationProvider =
-                      context.watch<OperationProvider>();
+                  var operationProvider = context.watch<OperationProvider>();
                   return Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Container(
@@ -44,10 +42,9 @@ class _AppointmentOperationMainState extends State<AppointmentOperationMain> {
                       height: 6,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4),
-                          color:
-                              index <= operationProvider.currentStep
-                                  ? colors["chosen"]
-                                  : colors["unchosen"]!),
+                          color: index <= operationProvider.currentStep
+                              ? colors["chosen"]
+                              : colors["unchosen"]!),
                     ),
                   );
                 })),
@@ -58,10 +55,13 @@ class _AppointmentOperationMainState extends State<AppointmentOperationMain> {
                 icon: const Image(image: AssetImage("assets/closing_icon.png")))
           ],
         ),
-        body: Column(
-          children: [
-            operation[currentPage]
-          ],
+        body: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              operation[currentStep],
+            ],
+          ),
         ),
         bottomNavigationBar: BottomAppBar(
           color: Colors.white,
@@ -87,12 +87,14 @@ class _AppointmentOperationMainState extends State<AppointmentOperationMain> {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 ),
                 onPressed: () {
-                  if (currentPage > 0) {
-                      setState(() {
-                        currentPage--;
-                        context.read<OperationProvider>().setCurrentStep(currentPage);
-                      });
-                    }
+                  if (currentStep > 0) {
+                    setState(() {
+                      currentStep--;
+                      context
+                          .read<OperationProvider>()
+                          .setCurrentStep(currentStep);
+                    });
+                  }
                 },
               ),
               ElevatedButton(
@@ -113,11 +115,41 @@ class _AppointmentOperationMainState extends State<AppointmentOperationMain> {
                         fontWeight: FontWeight.w700),
                   ),
                   onPressed: () {
-                    if (currentPage < 3) {
-                      setState(() {
-                        currentPage++;
-                        context.read<OperationProvider>().setCurrentStep(currentPage);
-                      });
+                    if (currentStep < 3) {
+                      if (currentStep == 1 &&
+                          context.read<FormProvider>().selectedPage == 1) {
+                        if (!context
+                            .read<FormProvider>()
+                            .formKey!
+                            .currentState!
+                            .validate()) {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: const Text("Заполните все поля"),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: const Text("Ок"))
+                                    ],
+                                  ));
+                        } else {
+                          setState(() {
+                            currentStep++;
+                            context
+                                .read<OperationProvider>()
+                                .setCurrentStep(currentStep);
+                          });
+                        }
+                      } else {
+                        setState(() {
+                          currentStep++;
+                          context
+                              .read<OperationProvider>()
+                              .setCurrentStep(currentStep);
+                        });
+                      }
                     }
                   }),
             ],
