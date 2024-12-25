@@ -134,6 +134,9 @@ class _TimeslotPageState extends State<TimeslotPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (selectedSlotId == null) {
+      context.read<OperationProvider>().appointmentId = null;
+    }
     return Expanded(
       child: ListView(
         children: [
