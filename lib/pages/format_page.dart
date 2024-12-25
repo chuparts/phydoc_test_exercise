@@ -60,7 +60,7 @@ class _FormatPageState extends State<FormatPage> {
                     Text(
                       _titles[index],
                       style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.w500),
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     Text(_subtitles[index],
                         style: const TextStyle(fontSize: 16))

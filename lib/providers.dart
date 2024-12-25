@@ -21,6 +21,12 @@ class OperationProvider extends ChangeNotifier {
     chosenFormatNum = selectedIndex;
     notifyListeners();
   }
+
+  int? appointmentId;
+
+  void setAppointmentId(id) {
+    appointmentId = id;
+  }
 }
 
 class FormProvider extends ChangeNotifier {

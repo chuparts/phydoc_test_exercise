@@ -16,11 +16,6 @@ class _PatientPageState extends State<PatientPage> {
   int _selectedPage = 0;
   var formKey = GlobalKey<FormState>();
 
-  BoxDecoration chosenPatient = BoxDecoration(
-    color: colors["chosen"],
-    borderRadius: BorderRadius.circular(10),
-  );
-
   Widget labelAndValue(String label, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +29,7 @@ class _PatientPageState extends State<PatientPage> {
         ),
         Text(
           value,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(
           height: 20,
@@ -160,9 +155,8 @@ class _PatientPageState extends State<PatientPage> {
       context.read<FormProvider>().setFormKey(formKey);
       _selectedPage = context.read<FormProvider>().selectedPage;
     });
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Expanded(
+      child: ListView(
         children: [
           title("Выберите кого хотите записать"),
           const SizedBox(
@@ -188,7 +182,10 @@ class _PatientPageState extends State<PatientPage> {
                       });
                     },
                     child: Container(
-                      decoration: _selectedPage == 0 ? chosenPatient : null,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: _selectedPage == 0 ? colors["chosen"] : Colors.white
+                      ),
                       width: 148,
                       height: 46,
                       child: Center(
@@ -217,7 +214,10 @@ class _PatientPageState extends State<PatientPage> {
                       });
                     },
                     child: Container(
-                      decoration: _selectedPage == 1 ? chosenPatient : null,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: _selectedPage == 1 ? colors["chosen"] : Colors.white
+                      ),
                       width: 148,
                       height: 46,
                       child: Center(

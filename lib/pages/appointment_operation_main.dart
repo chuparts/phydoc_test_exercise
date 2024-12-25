@@ -24,6 +24,26 @@ class _AppointmentOperationMainState extends State<AppointmentOperationMain> {
 
   int currentStep = 0;
 
+  void validateForm(BuildContext context) {
+    if (!context.read<FormProvider>().formKey!.currentState!.validate()) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: const Text("Заполните все поля"),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("Ок"))
+                ],
+              ));
+    } else {
+      setState(() {
+        currentStep++;
+        context.read<OperationProvider>().setCurrentStep(currentStep);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -56,7 +76,7 @@ class _AppointmentOperationMainState extends State<AppointmentOperationMain> {
           ],
         ),
         body: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               operation[currentStep],
@@ -64,7 +84,6 @@ class _AppointmentOperationMainState extends State<AppointmentOperationMain> {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
-          color: Colors.white,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -118,30 +137,20 @@ class _AppointmentOperationMainState extends State<AppointmentOperationMain> {
                     if (currentStep < 3) {
                       if (currentStep == 1 &&
                           context.read<FormProvider>().selectedPage == 1) {
-                        if (!context
-                            .read<FormProvider>()
-                            .formKey!
-                            .currentState!
-                            .validate()) {
-                          showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    title: const Text("Заполните все поля"),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: const Text("Ок"))
-                                    ],
-                                  ));
-                        } else {
-                          setState(() {
-                            currentStep++;
-                            context
-                                .read<OperationProvider>()
-                                .setCurrentStep(currentStep);
-                          });
-                        }
+                        validateForm(context);
+                      } else if (currentStep == 2 &&
+                          context.read<OperationProvider>().appointmentId ==
+                              null) {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: const Text("Выберите запись"),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text("Ок"))
+                                  ],
+                                ));
                       } else {
                         setState(() {
                           currentStep++;
@@ -159,29 +168,3 @@ class _AppointmentOperationMainState extends State<AppointmentOperationMain> {
     );
   }
 }
-
-
-// Center(
-//             child: Padding(
-//               padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-//               child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: List.generate(3, (index) {
-//                     var operationStepUpdateProvider =
-//                         context.watch<OperationStepUpdateProvider>();
-//                     return Padding(
-//                       padding: const EdgeInsets.all(4.0),
-//                       child: Container(
-//                         width: 28,
-//                         height: 6,
-//                         decoration: BoxDecoration(
-//                             borderRadius: BorderRadius.circular(4),
-//                             color:
-//                                 index <= operationStepUpdateProvider.currentStep
-//                                     ? colors["chosen"]
-//                                     : colors["unchosen"]!),
-//                       ),
-//                     );
-//                   })),
-//             ),
-//           ),

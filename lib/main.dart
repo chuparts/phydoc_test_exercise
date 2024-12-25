@@ -25,9 +25,14 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => OperationProvider()),
         ChangeNotifierProvider(create: (context) => FormProvider())
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
+        theme: ThemeData(
+            fontFamily: 'Onest',
+            scaffoldBackgroundColor: Colors.white,
+            appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
+            bottomAppBarTheme: const BottomAppBarTheme(color: Colors.white)),
         debugShowCheckedModeBanner: false,
-        home: AppointmentOperationMain(),
+        home: const AppointmentOperationMain(),
       ),
     );
   }

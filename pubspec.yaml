@@ -23,4 +23,8 @@ dev_dependencies:
 flutter:
   assets:
     - assets/
+  fonts:
+    - family: Onest
+      fonts:
+        - asset: assets/fonts/Onest-VariableFont_wght.ttf
   uses-material-design: true
