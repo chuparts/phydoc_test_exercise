@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-Future<void> fetchAppointments(int id, String format) async {
+Future<void> appoint(int id, String format) async {
   final Map<String, dynamic> requestBody = {
     'slot_id': id,
     'type': format,
@@ -20,6 +20,7 @@ Future<void> fetchAppointments(int id, String format) async {
       throw Exception(
           "Не удалось создать запись. Ошибка ${response.statusCode}: ${response.body}");
     }
+    print("Запись была успешно сделана");
   } catch (e) {
     throw Exception("Не удалось создать запись. Ошибка $e");
   }

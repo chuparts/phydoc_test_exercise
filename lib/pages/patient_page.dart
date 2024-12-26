@@ -16,27 +16,7 @@ class _PatientPageState extends State<PatientPage> {
   int _selectedPage = 0;
   var formKey = GlobalKey<FormState>();
 
-  Widget labelAndValue(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: 16, color: colors["icon_fill"]),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        Text(
-          value,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(
-          height: 20,
-        )
-      ],
-    );
-  }
+  
 
   Widget selfPage() {
     context.read<FormProvider>().setName("Иванов Иван");
@@ -44,11 +24,8 @@ class _PatientPageState extends State<PatientPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         labelAndValue("Имя и фамилия:", "Иванов Иван"),
-        const SizedBox(height: 8),
         labelAndValue("ИИН:", "041115486195"),
-        const SizedBox(height: 8),
         labelAndValue("Номер телефона:", "+7 707 748 4815"),
-        const SizedBox(height: 8),
         labelAndValue("Адрес прописки:", "ул. Гани Иляева 15"),
       ],
     );

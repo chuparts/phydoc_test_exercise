@@ -6,12 +6,11 @@ import 'package:phydoc_test_exercise/main.dart';
 import 'package:phydoc_test_exercise/providers.dart';
 import 'package:provider/provider.dart';
 
-
 class DaySlots extends StatefulWidget {
   final DateTime date;
   final List<Appointment> slots;
-  final Function(int) onSlotSelected;
-  final int? selectedSlot;
+  final Function(Appointment) onSlotSelected;
+  final Appointment? selectedSlot;
 
   const DaySlots({
     super.key,
@@ -54,9 +53,12 @@ class _DaySlotsState extends State<DaySlots> {
           itemBuilder: (context, index) {
             var time = widget.slots[index].dt;
             var price = widget.slots[index].price;
-            int slotId = widget.slots[index].id;
+            Appointment slotId = widget.slots[index];
 
-            bool isSelected = widget.selectedSlot == slotId;
+            bool isSelected = false;
+            if (widget.selectedSlot != null) {
+              isSelected = widget.selectedSlot!.id == slotId.id;
+            }
 
             return GestureDetector(
               onTap: () {
@@ -73,7 +75,7 @@ class _DaySlotsState extends State<DaySlots> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "${time.hour}:${time.minute < 10 ? "0${time.minute}" : time.minute}",
+                        "${time.hour}:${minutesToString(time.minute)}",
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -81,21 +83,13 @@ class _DaySlotsState extends State<DaySlots> {
                                 ? colors["chosen_bg"]
                                 : Colors.black),
                       ),
-                      RichText(
-                        text: TextSpan(
-                          style: TextStyle(
+                      priceToString(
+                          price.toString(),
+                          TextStyle(
                               fontSize: 16,
                               color: isSelected
                                   ? colors["chosen_bg"]
-                                  : colors["icon_fill"]),
-                          children: [
-                            TextSpan(
-                                text: "$price",
-                                style: const TextStyle(fontFamily: "Onest")),
-                            const TextSpan(text: "₸"),
-                          ],
-                        ),
-                      ),
+                                  : colors["icon_fill"])),
                     ],
                   ),
                 ),
@@ -119,7 +113,7 @@ class TimeslotPage extends StatefulWidget {
 }
 
 class _TimeslotPageState extends State<TimeslotPage> {
-  int? selectedSlotId;
+  Appointment? selectedSlotId;
   bool moreOptionsShown = false;
 
   Map<DateTime, List<Appointment>> divideByDate(List<Appointment> list) {
@@ -134,9 +128,7 @@ class _TimeslotPageState extends State<TimeslotPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (selectedSlotId == null) {
-      context.read<OperationProvider>().appointmentId = null;
-    }
+    selectedSlotId = context.read<OperationProvider>().appointment;
     return Expanded(
       child: ListView(
         children: [
@@ -177,7 +169,7 @@ class _TimeslotPageState extends State<TimeslotPage> {
                           selectedSlotId = slotId;
                           context
                               .read<OperationProvider>()
-                              .setAppointmentId(selectedSlotId);
+                              .setAppointment(selectedSlotId!);
                         });
                       },
                     ),
@@ -214,7 +206,7 @@ class _TimeslotPageState extends State<TimeslotPage> {
                             selectedSlotId = slotId;
                             context
                                 .read<OperationProvider>()
-                                .setAppointmentId(selectedSlotId);
+                                .setAppointment(selectedSlotId!);
                           });
                         },
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:phydoc_test_exercise/classes/appointment.dart';
 
 class OperationProvider extends ChangeNotifier {
   int currentStep = 0;
@@ -22,12 +23,14 @@ class OperationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  int? appointmentId;
+  Appointment? appointment;
 
-  void setAppointmentId(id) {
-    appointmentId = id;
+  void setAppointment(Appointment chosen) {
+    appointment = chosen;
+    notifyListeners();
   }
 }
+
 
 class FormProvider extends ChangeNotifier {
   int selectedPage = 0;
@@ -41,7 +44,7 @@ class FormProvider extends ChangeNotifier {
   void setSelectedPage(int page) {
     selectedPage = page;
   }
-  void setName(String name) {
-    name = name;
+  void setName(String selectedName) {
+    name = selectedName;
   }
 }

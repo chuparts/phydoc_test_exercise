@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phydoc_test_exercise/main.dart';
 
 Widget title(String text) {
   return Text(
@@ -13,6 +14,29 @@ class Warning extends StatefulWidget {
   @override
   State<Warning> createState() => _WarningState();
 }
+
+Widget labelAndValue(String label, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(fontSize: 16, color: colors["icon_fill"]),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        const SizedBox(height: 8),
+      ],
+    );
+  }
 
 class _WarningState extends State<Warning> {
   var textColor = const Color(0xff7F3004);
@@ -78,7 +102,9 @@ class _WarningState extends State<Warning> {
               ),
             ],
           )
-        : const SizedBox(height: 16,);
+        : const SizedBox(
+            height: 16,
+          );
   }
 }
 
@@ -107,3 +133,19 @@ List<String> months = [
   "ноября",
   "декабря"
 ];
+
+String minutesToString(int minutes) {
+  return minutes < 10 ? "0$minutes" : minutes.toString();
+}
+
+Widget priceToString(String price, TextStyle style) {
+  return RichText(
+    text: TextSpan(
+      style: style,
+      children: [
+        TextSpan(text: price, style: const TextStyle(fontFamily: "Onest")),
+        const TextSpan(text: "₸"),
+      ],
+    ),
+  );
+}
